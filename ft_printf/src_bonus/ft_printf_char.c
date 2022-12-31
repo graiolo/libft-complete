@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_printf.h"
+#include "../../include/ft_printf_bonus.h"
 
 static int	ft_number_of_pad_char(char *str, t_flag flag)
 {

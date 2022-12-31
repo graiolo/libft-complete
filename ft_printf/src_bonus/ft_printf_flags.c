@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_printf.h"
+#include "../../include/ft_printf_bonus.h"
 
 static void	ft_init_flags(t_flag *flag)
 {

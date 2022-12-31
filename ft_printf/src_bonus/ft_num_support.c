@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_printf.h"
+#include "../../include/ft_printf_bonus.h"
 
 void	ft_b_prec_num(t_flag flag, char *num,
 			int *print_length, int pad_print)

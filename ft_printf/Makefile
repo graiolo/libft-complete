@@ -24,18 +24,33 @@ LIB			= ar rcs $(NAME)
 
 ODIR		= obj/
 
+ODIR_BONUS	= obj_bonus/
+
 DIR			= src/
 
-SRC_FILES	=	ft_printf.c ft_printf_utils.c ft_print_ptr.c ft_print_unsigned.c ft_print_hex.c\
+DIR_BONUS		= src_bonus/
+
+SRC_FILES	=	ft_print_hex.c ft_print_ptr.c\
+			ft_print_unsigned.c ft_printf_utils.c\
+			ft_printf.c\
+
+SRC_FILES_BONUS	=	ft_printf.c ft_printf_utils.c ft_print_ptr.c ft_print_unsigned.c ft_print_hex.c\
 				ft_printf_flags.c ft_printf_char.c ft_printf_length_flag.c ft_printf_print_num.c\
 				ft_hex_unsigned_support.c ft_num_support.c
 
-OBJ 		= 	$(SRC_FILES:.c=.o)
+OBJ_BONUS 		= 	$(SRC_FILES_BONUS:.c=.o)
+
+OBJ	 		= 	$(SRC_FILES:.c=.o)
+
+$(ODIR_BONUS)%.o : $(DIR_BONUS)%.c
+	$(CC) $(CFLAG) $< -o $@
 
 $(ODIR)%.o : $(DIR)%.c
 	$(CC) $(CFLAG) $< -o $@
 
-OFILE 		= $(addprefix $(ODIR), $(OBJ))
+OFILE_BONUS		= $(addprefix $(ODIR_BONUS), $(OBJ_BONUS))
+
+OFILE			= $(addprefix $(ODIR), $(OBJ))
 
 
 DEF_COLOR = \033[0;39m
@@ -50,11 +65,11 @@ $(NAME):	$(OFILE)
 all:		$(NAME)
 
 clean:
-			@$(RM) $(OFILE)
+			@$(RM) $(OFILE) $(OFILE_BONUS)
 			@echo "$(CIANO)file .obj di printf eliminati con successo!$(DEF_COLOR)"
 
 clean2:
-			@$(RM) $(OFILE)
+			@$(RM) $(OFILE) $(OFILE_BONUS)
 
 fclean:		clean2
 			@$(RM) libft.a
@@ -62,6 +77,9 @@ fclean:		clean2
 
 re:			fclean all
 
-bonus:		all
+bonus:		$(OFILE_BONUS) 
+			@$(LIB) $(OFILE_BONUS)
+			@echo "$(GREEN)printf.a con le flags compilata con successo!$(DEF_COLOR)"
+
 
 .PHONY:		all clean fclean re

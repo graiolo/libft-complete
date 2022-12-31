@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_printf.h"
+#include "../../include/ft_printf_bonus.h"
 
 int	ft_nzero_pzero(t_flag flag)
 {

@@ -3,93 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_unsigned.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: graiolo <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ajordan- <ajordan-@student.42urduliz.com>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/21 16:34:31 by graiolo           #+#    #+#             */
-/*   Updated: 2022/10/21 16:34:33 by graiolo          ###   ########.fr       */
+/*   Created: 2021/09/10 10:50:18 by ajordan-          #+#    #+#             */
+/*   Updated: 2021/10/19 13:55:49 by ajordan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_printf.h"
 
-static int	ft_printstr_unsign(char *str, t_flag flag)
+int	ft_num_len(unsigned	int num)
 {
-	int	i;
 	int	len;
 
-	(void) flag;
 	len = 0;
-	i = 0;
-	if (str == NULL)
+	while (num != 0)
 	{
-		len += ft_putstr_error("(null)", flag);
-		return (len);
-	}
-	while (str[i])
-	{
-		len += write(1, &str[i], 1);
-		i++;
+		len++;
+		num = num / 10;
 	}
 	return (len);
 }
 
-static int	ft_number_of_pad_unsign(unsigned int n, t_flag flag, char *num)
+char	*ft_uitoa(unsigned int n)
 {
-	int		len_print;
-	int		l_pad;
-	int		n_pad;
+	char	*num;
+	int		len;
 
-	(void) n;
-	len_print = ft_strlen(num);
-	if (flag.plus_sign != 0)
-		len_print++;
-	if (flag.b_prec == false)
-		flag.prec = len_print;
-	len_print = ft_max(flag.prec, len_print);
-	l_pad = flag.lenght - len_print;
-	n_pad = ft_max(0, l_pad);
-	return (n_pad);
-}
-
-int	ft_printf_pad_unsign(unsigned int n, t_flag flag, char *num)
-{
-	int	n_pad;
-	int	i;
-
-	i = 0;
-	n_pad = 0;
-	n_pad = ft_number_of_pad_unsign(n, flag, num);
-	while (n_pad != 0)
+	len = ft_num_len(n);
+	num = (char *)malloc(sizeof(char) * (len + 1));
+	if (!num)
+		return (0);
+	num[len] = '\0';
+	while (n != 0)
 	{
-		i += write(1, &flag.pad, 1);
-		n_pad--;
+		num[len - 1] = n % 10 + 48;
+		n = n / 10;
+		len--;
 	}
-	return (i);
+	return (num);
 }
 
-int	ft_print_unsigned(unsigned int n, t_flag *flag)
+int	ft_print_unsigned(unsigned int n)
 {
-	int		pad_print;
+	int		print_length;
 	char	*num;
 
-	if (n == 0 && flag->prec == 0)
-		return (ft_nzero_pzero(*flag));
+	print_length = 0;
 	if (n == 0)
-		return (ft_only_nzero_unsigned(*flag, n));
-	num = ft_uitoa(n);
-	if (flag->ladjust == false)
-		flag->print_length += ft_printf_pad_unsign(n, *flag, num);
-	pad_print = flag->print_length;
-	if (flag->pad == '0')
+		print_length += write(1, "0", 1);
+	else
 	{
-		while (flag->print_length + (int)ft_strlen(num) < flag->lenght)
-			flag->print_length += write(1, &(flag->pad), 1);
+		num = ft_uitoa(n);
+		print_length += ft_printstr(num);
+		free(num);
 	}
-	if (flag->b_prec == true)
-		ft_b_prec_unsigned(*flag, num, &(flag->print_length), pad_print);
-	flag->print_length += ft_printstr_unsign(num, *flag);
-	if (flag->ladjust == true)
-		flag->print_length += ft_printf_pad_unsign(n, *flag, num);
-	free(num);
-	return (flag->print_length);
+	return (print_length);
 }
