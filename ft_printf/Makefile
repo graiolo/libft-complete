@@ -10,25 +10,27 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= ../archive/libft.a
+NAME		=	 ../archive/libft.a
 
-CC			= gcc $(CFLAGS)
+CC		=	 gcc $(CFLAGS)
 
-CFLAGS		= -Wall -Werror -Wextra -c -I $(IDIR)
+CFLAGS		=	 -Wall -Werror -Wextra -c -I $(IDIR)
 
-IDIR		= ../include
+IDIR		=	 ../include
 
-RM			= rm -f
+RM		=	 rm -f
 
-LIB			= ar rcs $(NAME)
+DRM		= 	rm -fr
 
-ODIR		= obj/
+LIB		=	 ar rcs $(NAME)
 
-ODIR_BONUS	= obj_bonus/
+ODIR		=	 obj/
 
-DIR			= src/
+ODIR_BONUS	=	 obj_bonus/
 
-DIR_BONUS		= src_bonus/
+DIR		=	 src/
+
+DIR_BONUS	=	 src_bonus/
 
 SRC_FILES	=	ft_print_hex.c ft_print_ptr.c\
 			ft_print_unsigned.c ft_printf_utils.c\
@@ -38,9 +40,9 @@ SRC_FILES_BONUS	=	ft_printf.c ft_printf_utils.c ft_print_ptr.c ft_print_unsigned
 				ft_printf_flags.c ft_printf_char.c ft_printf_length_flag.c ft_printf_print_num.c\
 				ft_hex_unsigned_support.c ft_num_support.c
 
-OBJ_BONUS 		= 	$(SRC_FILES_BONUS:.c=.o)
+OBJ_BONUS 	=	 $(SRC_FILES_BONUS:.c=.o)
 
-OBJ	 		= 	$(SRC_FILES:.c=.o)
+OBJ	 	=	 $(SRC_FILES:.c=.o)
 
 $(ODIR_BONUS)%.o : $(DIR_BONUS)%.c
 	$(CC) $(CFLAG) $< -o $@
@@ -48,9 +50,9 @@ $(ODIR_BONUS)%.o : $(DIR_BONUS)%.c
 $(ODIR)%.o : $(DIR)%.c
 	$(CC) $(CFLAG) $< -o $@
 
-OFILE_BONUS		= $(addprefix $(ODIR_BONUS), $(OBJ_BONUS))
+OFILE_BONUS	=	 $(addprefix $(ODIR_BONUS), $(OBJ_BONUS))
 
-OFILE			= $(addprefix $(ODIR), $(OBJ))
+OFILE		=	 $(addprefix $(ODIR), $(OBJ))
 
 
 DEF_COLOR = \033[0;39m
@@ -58,7 +60,7 @@ GREEN = \033[0;92m
 RED = \033[0;91m
 CIANO = \033[0;96m
 
-$(NAME):	$(OFILE) 
+$(NAME):	dir $(OFILE) 
 			@$(LIB) $(OFILE)
 			@echo "$(GREEN)printf.a compilata con successo!$(DEF_COLOR)"
 
@@ -66,10 +68,12 @@ all:		$(NAME)
 
 clean:
 			@$(RM) $(OFILE) $(OFILE_BONUS)
+			@$(DRM) $(ODIR) $(ODIR_BONUS)
 			@echo "$(CIANO)file .obj di printf eliminati con successo!$(DEF_COLOR)"
 
 clean2:
 			@$(RM) $(OFILE) $(OFILE_BONUS)
+			@$(DRM) $(ODIR) $(ODIR_BONUS)
 
 fclean:		clean2
 			@$(RM) libft.a
@@ -77,9 +81,18 @@ fclean:		clean2
 
 re:			fclean all
 
-bonus:		$(OFILE_BONUS) 
-			@$(LIB) $(OFILE_BONUS)
-			@echo "$(GREEN)printf.a con le flags compilata con successo!$(DEF_COLOR)"
+bonus:		dir_bonus $(OFILE) $(OFILE_BONUS) 
+			@$(LIB) $(OFILE) $(OFILE_BONUS)
+			@echo "$(GREEN)bonus printf.a compilata con successo!$(DEF_COLOR)"
 
+dir:
+			if [ ! -d "$(ODIR)" ]; then \
+				mkdir $(ODIR); \
+			fi
+
+dir_bonus:	 dir
+			if [ ! -d "$(ODIR_BONUS)" ]; then \
+				mkdir $(ODIR_BONUS); \
+			fi
 
 .PHONY:		all clean fclean re
